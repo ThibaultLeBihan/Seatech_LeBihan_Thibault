@@ -10,5 +10,9 @@
 void InitTimer23 (void) ;
 void InitTimer1 (void) ;
 
+/* DECLARATION*/
+void _T3Interrupt(void);
+void _T1Interrupt(void);
+
 #endif	/* TIMER_H */
 

@@ -9,6 +9,11 @@
 #include "timer.h"
 #include "IO.h"
 
+#include "Pwm.h"
+
+
+unsigned char toggle=0;
+
 //Initialisation d?un timer 32 bits
 void InitTimer23(void) {
 T3CONbits.TON = 0; // Stop any 16-bit Timer3 operation
@@ -30,7 +35,24 @@ T2CONbits.TON = 1; // Start 32-bit Timer
 //Interruption du timer 32 bits sur 2-3
 void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {
 IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
-LED_ORANGE = !LED_ORANGE;
+if(toggle == 0 )
+{
+PWMSetSpeed(20, MOTEUR_DROIT) ;
+PWMSetSpeed(20, MOTEUR_GAUCHE) ;
+toggle = 1 ;
+}
+else
+{
+PWMSetSpeed(-20, MOTEUR_DROIT) ;
+PWMSetSpeed(-20, MOTEUR_GAUCHE) ;
+toggle = 0 ;
+}
+
+
+
+
+
+/*LED_ORANGE = !LED_ORANGE;*/
 }
 
 //Initialisation d?un timer 16 bits
@@ -44,7 +66,7 @@ T1CONbits.TCKPS = 0b01; //Prescaler 0b01
 //01 = 1:8 prescale value
 //00 = 1:1 prescale value
 T1CONbits.TCS = 0; //clock source = internal clock
-PR1 = 0xC3500;//0x1388
+PR1 = 0x1388;//0x1388
 
 IFS0bits.T1IF = 0; // Clear Timer Interrupt Flag
 IEC0bits.T1IE = 1; // Enable Timer interrupt
@@ -57,4 +79,6 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void)
 IFS0bits.T1IF = 0;
 LED_BLANCHE = !LED_BLANCHE;
 }
+
+
 
