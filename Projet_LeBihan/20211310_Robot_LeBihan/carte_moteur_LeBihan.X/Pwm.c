@@ -5,7 +5,7 @@
 #include "ToolBox.h"
 
 #define PWMPER 40.0
-unsigned char acceleration = 20;
+
 
 void InitPWM(void)
 {
@@ -71,15 +71,13 @@ MOTEUR_DROIT_DUTY_CYCLE = Abs(robotState.vitesseDroiteCommandeCourante*PWMPER);
    */
 void PWMSetSpeedConsigne(float vitesseEnPourcents, char numero_moteur){
 IFS0bits.T1IF = 0;
-if (numero_moteur==0)
+if (numero_moteur==MOTEUR_DROIT)
 {
 robotState.vitesseDroiteConsigne=vitesseEnPourcents;
 }
 
-if (numero_moteur==1)
+if (numero_moteur==MOTEUR_GAUCHE)
 {
 robotState.vitesseGaucheConsigne=vitesseEnPourcents; 
 }
-
-PWMUpdateSpeed();
 }

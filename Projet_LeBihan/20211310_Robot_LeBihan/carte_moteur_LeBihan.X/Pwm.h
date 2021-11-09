@@ -7,6 +7,9 @@
 
 #ifndef PWM_H
 #define	PWM_H
+
+#include <xc.h>
+
 //Définitions des pins pour les hacheurs moteurs
 #define MOTEUR1_IN1 _LATB14
 #define MOTEUR1_IN2 _LATB15
@@ -30,11 +33,7 @@
 #define MOTEUR_DROIT 1
 #define MOTEUR_GAUCHE 0
 
-#define acceleration 5
-
 void InitPWM(void);
-/*void PWMSetSpeed(float,int);*/
-
 void PWMSetSpeedConsigne(float, char);
 
 

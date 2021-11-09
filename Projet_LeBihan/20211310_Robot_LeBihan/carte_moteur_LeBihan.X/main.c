@@ -11,7 +11,12 @@
 #include "IO.h"
 #include "timer.h"
 #include "PWM.h"
+#include "ADC.h"
 
+int result;
+int ADCValue0;
+int ADCValue1;
+int ADCValue2;
 
 int main (void){
 /***************************************************************************************************/
@@ -30,15 +35,21 @@ LED_ORANGE = 1;
 InitTimer1();
 InitTimer23();
 InitPWM();
+InitADC1();
 
-_T3Interrupt();
-/*_T1Interrupt();
-PWMSetSpeed(50,MOTEUR_DROIT);*/
 
 /****************************************************************************************************/
 // Boucle Principale
 /****************************************************************************************************/
 while(1){
+ADCIsConversionFinished();
+if (ADCIsConversionFinished()==1){
+    ADCClearConversionFinishedFlag();
+    unsigned int * result = ADCGetResult();
+    ADCValue0 = result[0];
+    ADCValue1 = result[1];
+    ADCValue2 = result[2];
+}
 
 } // fin main
 
