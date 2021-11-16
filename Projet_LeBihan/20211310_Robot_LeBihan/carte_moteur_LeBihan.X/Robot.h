@@ -22,6 +22,8 @@
 #define MOTEUR_DROIT_H_PWM_ENABLE IOCON6bits.PENH
 #define MOTEUR_DROIT_DUTY_CYCLE PDC2
 
+
+
 typedef struct robotStateBITS {
 union {
 
@@ -30,7 +32,11 @@ unsigned char taskEnCours;
 float vitesseGaucheConsigne;
 float vitesseGaucheCommandeCourante;
 float vitesseDroiteConsigne;
-float vitesseDroiteCommandeCourante;}
+float vitesseDroiteCommandeCourante;
+float distanceTelemetreDroit;
+float distanceTelemetreGauche;
+float distanceTelemetreCentre;}
+
 ;}
 ;} ROBOT_STATE_BITS;
 
