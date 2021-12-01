@@ -13,8 +13,8 @@
 #include "ADC.h"
 #include "main.h"
 
-float freq1=2.5;
-float freq4=1000;
+float freq1 = 150;
+float freq4 = 1000;
 
 unsigned char toggle = 0;
 
@@ -41,23 +41,20 @@ void InitTimer23(void) {
 
 //Interruption du timer 32 bits sur 2-3
 
-/*void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {
+void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {
     IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
-    if (toggle == 0) {
-        PWMSetSpeedConsigne(20, MOTEUR_DROIT);
-        PWMSetSpeedConsigne(20, MOTEUR_GAUCHE);
-        toggle = 1;
-    } else {
-        PWMSetSpeedConsigne(-20, MOTEUR_DROIT);
-        PWMSetSpeedConsigne(-20, MOTEUR_GAUCHE);
-        toggle = 0;
-    }
+//    if (toggle == 0) {
+//        PWMSetSpeedConsigne(20, MOTEUR_DROIT);
+//        PWMSetSpeedConsigne(20, MOTEUR_GAUCHE);
+//        toggle = 1;
+//    } else {
+//        PWMSetSpeedConsigne(-20, MOTEUR_DROIT);
+//        PWMSetSpeedConsigne(-20, MOTEUR_GAUCHE);
+//        toggle = 0;
+//    }
 }
-*/
 
-
-
-    /*LED_ORANGE = !LED_ORANGE;*/
+/*LED_ORANGE = !LED_ORANGE;*/
 
 //Initialisation d?un timer 16 bits
 
@@ -84,31 +81,24 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     //LED_BLANCHE = !LED_BLANCHE;
     PWMUpdateSpeed();
     ADC1StartConversionSequence();
-    LED_BLEUE = !LED_BLEUE;
+    //LED_BLEUE = !LED_BLEUE;
 }
 
-void SetFreqTimer1(float freq1)
-{
-T1CONbits.TCKPS = 0b00; //00 = 1:1 prescaler value
-if(FCY /freq1 > 65535)
-{
-T1CONbits.TCKPS = 0b01; //01 = 1:8 prescaler value
-if(FCY /freq1 / 8 > 65535)
-{
-T1CONbits.TCKPS = 0b10; //10 = 1:64 prescaler value
-if(FCY /freq1 / 64 > 65535)
-{
-T1CONbits.TCKPS = 0b11; //11 = 1:256 prescaler value
-PR1 = (int)(FCY / freq1 / 256);
-}
-else
-PR1 = (int)(FCY / freq1 / 64);
-}
-else
-PR1 = (int)(FCY / freq1 / 8);
-}
-else
-PR1 = (int)(FCY / freq1);
+void SetFreqTimer1(float freq1) {
+    T1CONbits.TCKPS = 0b00; //00 = 1:1 prescaler value
+    if (FCY / freq1 > 65535) {
+        T1CONbits.TCKPS = 0b01; //01 = 1:8 prescaler value
+        if (FCY / freq1 / 8 > 65535) {
+            T1CONbits.TCKPS = 0b10; //10 = 1:64 prescaler value
+            if (FCY / freq1 / 64 > 65535) {
+                T1CONbits.TCKPS = 0b11; //11 = 1:256 prescaler value
+                PR1 = (int) (FCY / freq1 / 256);
+            } else
+                PR1 = (int) (FCY / freq1 / 64);
+        } else
+            PR1 = (int) (FCY / freq1 / 8);
+    } else
+        PR1 = (int) (FCY / freq1);
 }
 
 void InitTimer4(void) {
@@ -124,35 +114,28 @@ void InitTimer4(void) {
     SetFreqTimer4(freq4);
     IFS1bits.T4IF = 0; // Clear Timer Interrupt Flag
     IEC1bits.T4IE = 1; // Enable Timer interrupt
-    T1CONbits.TON = 1; // Enable Timer
+    T4CONbits.TON = 1; // Enable Timer
 }
 
-void SetFreqTimer4(float freq4)
-{
-T4CONbits.TCKPS = 0b00; //00 = 1:1 prescaler value
-if(FCY /freq4 > 65535)
-{
-T4CONbits.TCKPS = 0b01; //01 = 1:8 prescaler value
-if(FCY /freq4 / 8 > 65535)
-{
-T4CONbits.TCKPS = 0b10; //10 = 1:64 prescaler value
-if(FCY /freq4 / 64 > 65535)
-{
-T4CONbits.TCKPS = 0b11; //11 = 1:256 prescaler value
-PR4 = (int)(FCY / freq4 / 256);
-}
-else
-PR4 = (int)(FCY / freq4 / 64);
-}
-else
-PR4 = (int)(FCY / freq4 / 8);
-}
-else
-PR4 = (int)(FCY / freq4);
+void SetFreqTimer4(float freq4) {
+    T4CONbits.TCKPS = 0b00; //00 = 1:1 prescaler value
+    if (FCY / freq4 > 65535) {
+        T4CONbits.TCKPS = 0b01; //01 = 1:8 prescaler value
+        if (FCY / freq4 / 8 > 65535) {
+            T4CONbits.TCKPS = 0b10; //10 = 1:64 prescaler value
+            if (FCY / freq4 / 64 > 65535) {
+                T4CONbits.TCKPS = 0b11; //11 = 1:256 prescaler value
+                PR4 = (int) (FCY / freq4 / 256);
+            } else
+                PR4 = (int) (FCY / freq4 / 64);
+        } else
+            PR4 = (int) (FCY / freq4 / 8);
+    } else
+        PR4 = (int) (FCY / freq4);
 }
 
 void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
-IFS1bits.T4IF = 0;
-timestamp=timestamp+1;
-OperatingSystemLoop();
+    IFS1bits.T4IF = 0;
+    timestamp++;
+    OperatingSystemLoop();
 }
